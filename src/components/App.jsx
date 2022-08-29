@@ -1,6 +1,6 @@
 import styles from '../index.css';
 import { Component } from 'react';
-import fetchImagesWithQuery from './Services/api';
+import * as api from './Services/api';
 import { ImageGallery } from 'components/ImageGallery/ImageGallery';
 import { Searchbar } from './Searchbar/Searchbar';
 import { Loader } from './Loader/Loader';
@@ -31,7 +31,7 @@ export class App extends Component {
     try {
       this.setState({ isLoading: true });
 
-      const images = await fetchImagesWithQuery(searchQuery, page);
+      const images = await api.fetchImagesWithQuery(searchQuery, page);
 
       this.setState(prevState => ({
         images: [...prevState.images, ...images],
