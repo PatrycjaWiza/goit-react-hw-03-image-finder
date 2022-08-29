@@ -4,9 +4,9 @@ import { ImageGalleryStyle } from './ImageGalleryStyles';
 
 export class ImageGallery extends Component {
   render() {
-    const { images, openModal } = this.props;
+    const { images, openModal, id } = this.props;
     return (
-      <ImageGalleryStyle className="gallery">
+      <ImageGalleryStyle key={id} className="gallery">
         {images.map(({ id, webformatURL, tags, largeImageURL }) => {
           return (
             <ImageGalleryItem

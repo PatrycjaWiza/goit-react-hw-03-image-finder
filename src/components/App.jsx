@@ -1,73 +1,81 @@
 import styles from '../index.css';
-import axios from 'axios';
 import { Component } from 'react';
-
+import api from './Services/api';
 import { ImageGallery } from 'components/ImageGallery/ImageGallery';
 import { Searchbar } from './Searchbar/Searchbar';
 import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
 import { Button } from './Button/Button';
 
-axios.defaults.baseURL = 'https://pixabay.com/api/';
-const API_KEY = '28252958-31fd02edbaf0cd1c2b2739817';
-
 export class App extends Component {
   state = {
     isLoading: false,
-    error: null,
     images: [],
+    error: null,
     searchWord: '',
     page: 1,
     showModal: false,
+    largeImage: '',
   };
 
-  // HTTP
-  async fetchImages(page) {
-    this.setState({ isLoading: true });
-    const query = this.state.searchWord;
-    const response = await axios.get(
-      `?q=${query}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
-    );
-    this.setState({ images: response.data.hits, isLoading: false });
-    this.setState(prevState => ({ page: prevState.page + 1 }));
-    console.log(query);
-    console.log(page);
-  }
-
-  getSearchWord = values => {
+  getSearchWord = searchWord => {
+    console.log(searchWord);
     this.setState({
       images: [],
-      searchWord: '',
+      searchWord,
       page: 1,
-      showModal: false,
     });
-
-    this.setState({ searchWord: values });
-    const { page } = this.state;
-    this.fetchImages(values, page);
   };
 
-  loadMore() {
-    const { searchWord, page } = this.state;
-    console.log(page);
+  renderImages = async (searchQuery, page) => {
+    try {
+      this.setState({ isLoading: true });
 
-    this.fetchImages(searchWord, page);
+      const images = await api.fetchImagesWithQuery(searchQuery, page);
+
+      this.setState(prevState => ({
+        images: [...prevState.images, ...images],
+      }));
+      console.log(searchQuery);
+    } catch (error) {
+      this.setState({ error });
+    } finally {
+      this.setState({ isLoading: false });
+    }
+  };
+
+  // does not load more
+  loadMore() {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
   }
-  openModal() {
+  // does not open largeImg
+  openModal = () => {
     this.setState({ showModal: true });
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.searchWord !== this.state.searchWord ||
+      prevState.page !== this.state.page
+    ) {
+      this.renderImages(this.state.searchWord, this.state.page);
+    }
   }
+
   render() {
-    const { images, isLoading, showModal } = this.state;
+    const { images, isLoading, error, showModal } = this.state;
     return (
       <div style={styles.App}>
+        {error && <p>{error.message}</p>}
         <Searchbar onSubmit={this.getSearchWord} />
-        {isLoading ? (
-          <Loader />
-        ) : (
+        {isLoading && <Loader />}
+
+        {images.length > 0 && (
           <ImageGallery images={images} openModal={this.openModal} />
         )}
+
         {showModal ? <Modal /> : ''}
-        {images.length !== 0 ? <Button onClick={this.loadMore} /> : ''}
+        {images.length > 0 && <Button onClick={this.loadMore} />}
       </div>
     );
   }
