@@ -3,6 +3,11 @@ import { ButtonStyles } from './ButtonStyles';
 
 export class Button extends Component {
   render() {
-    return <ButtonStyles type="submit">Load more</ButtonStyles>;
+    const { loadMore } = this.props;
+    return (
+      <ButtonStyles type="button" onClick={loadMore}>
+        Load more
+      </ButtonStyles>
+    );
   }
 }

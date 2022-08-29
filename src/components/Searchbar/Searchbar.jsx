@@ -14,11 +14,6 @@ export class Searchbar extends Component {
     this.setState({ name: '' });
   }
 
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.onSubmit({ ...this.state });
-    this.reset();
-  };
   render() {
     const { name } = this.state;
     const { onSubmit } = this.props;

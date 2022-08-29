@@ -1,15 +1,15 @@
 import { Component } from 'react';
+import { ModalStyles } from './ModalStyles';
 
 export class Modal extends Component {
   render() {
-    const { images } = this.props;
+    const { children, closeModal } = this.props;
     return (
-      // close on escape and overlay click
-      <div className="overlay">
-        <div className="modal">
-          <img src={images.largeImageURL} alt={images.tags} />
-        </div>
-      </div>
+      // close on escape && get largeImageURL
+
+      <ModalStyles onClick={closeModal} className="overlay">
+        <div className="modal">{children}</div>
+      </ModalStyles>
     );
   }
 }

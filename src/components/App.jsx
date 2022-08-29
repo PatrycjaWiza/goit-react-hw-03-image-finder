@@ -15,7 +15,7 @@ export class App extends Component {
     searchWord: '',
     page: 1,
     showModal: false,
-    largeImage: '',
+    largeImageURL: '',
   };
 
   getSearchWord = searchWord => {
@@ -44,13 +44,15 @@ export class App extends Component {
     }
   };
 
-  // does not load more
-  loadMore() {
+  loadMoreBtn = () => {
     this.setState(prevState => ({ page: prevState.page + 1 }));
-  }
-  // does not open largeImg
-  openModal = () => {
-    this.setState({ showModal: true });
+  };
+
+  openModal = largeImageURL => {
+    this.setState({ largeImageURL: largeImageURL, showModal: true });
+  };
+  closeModal = () => {
+    this.setState({ showModal: false });
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -63,9 +65,15 @@ export class App extends Component {
   }
 
   render() {
-    const { images, isLoading, error, showModal } = this.state;
+    const { images, isLoading, error, showModal, largeImageURL } = this.state;
     return (
       <div style={styles.App}>
+        {showModal && (
+          <Modal images={images} closeModal={this.closeModal}>
+            <img src={largeImageURL} alt="large image" />
+          </Modal>
+        )}
+
         {error && <p>{error.message}</p>}
         <Searchbar onSubmit={this.getSearchWord} />
         {isLoading && <Loader />}
@@ -74,8 +82,7 @@ export class App extends Component {
           <ImageGallery images={images} openModal={this.openModal} />
         )}
 
-        {showModal ? <Modal /> : ''}
-        {images.length > 0 && <Button onClick={this.loadMore} />}
+        {images.length > 0 && <Button loadMore={this.loadMoreBtn} />}
       </div>
     );
   }

@@ -3,16 +3,15 @@ import { ImageGalleryItemStyle } from './ImageGalleryItemStyle';
 
 export class ImageGalleryItem extends Component {
   render() {
-    const { openModal, webformatURL, tags, largeImageURL, id } = this.props;
+    const { images, openModal } = this.props;
+    const { webformatURL, tags, largeImageURL } = images;
     return (
       <>
         <ImageGalleryItemStyle className="gallery-item">
           <img
-            onClick={openModal}
             src={webformatURL}
             alt={tags}
-            data-largeimg={largeImageURL}
-            key={id}
+            onClick={() => openModal(largeImageURL)}
           />
         </ImageGalleryItemStyle>
       </>
