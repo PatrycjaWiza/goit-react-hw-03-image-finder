@@ -69,7 +69,11 @@ export class App extends Component {
     return (
       <div style={styles.App}>
         {showModal && (
-          <Modal images={images} closeModal={this.closeModal}>
+          <Modal
+            images={images}
+            closeModal={this.closeModal}
+            escModal={this.closeModal}
+          >
             <img src={largeImageURL} alt="large image" />
           </Modal>
         )}
