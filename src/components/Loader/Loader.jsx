@@ -1,18 +1,17 @@
 import { Component } from 'react';
-import { Audio } from 'react-loader-spinner';
+import { Vortex } from 'react-loader-spinner';
 
 export class Loader extends Component {
   render() {
     return (
-      <Audio
+      <Vortex
+        visible={true}
         height="80"
         width="80"
-        radius="9"
-        color="green"
-        ariaLabel="three-dots-loading"
-        wrapperStyle
-        wrapperClassName
-        margin="0 auto"
+        ariaLabel="vortex-loading"
+        wrapperStyle={{ margin: '25vh' }}
+        wrapperClassName="vortex-wrapper"
+        colors={['red', 'green', 'blue', 'yellow', 'orange', 'purple']}
       />
     );
   }
