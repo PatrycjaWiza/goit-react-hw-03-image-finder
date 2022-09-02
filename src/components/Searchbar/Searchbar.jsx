@@ -10,23 +10,21 @@ export class Searchbar extends Component {
     this.setState({ name: e.target.value });
   };
 
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.onSubmit(this.state.name);
+    this.reset();
+  };
+
   reset() {
     this.setState({ name: '' });
   }
 
   render() {
     const { name } = this.state;
-    const { onSubmit } = this.props;
     return (
       <SearchbarStyle className="searchbar">
-        <form
-          className="form"
-          onSubmit={e => {
-            e.preventDefault();
-            onSubmit(name);
-            this.reset();
-          }}
-        >
+        <form className="form" onSubmit={this.handleSubmit}>
           <button type="submit" className="button">
             <span className="button-label">Search</span>
           </button>

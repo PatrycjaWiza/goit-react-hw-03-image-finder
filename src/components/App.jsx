@@ -1,6 +1,6 @@
 import styles from '../index.css';
 import { Component } from 'react';
-import * as api from './Services/api';
+import * as api from '../Services/api';
 import { ImageGallery } from 'components/ImageGallery/ImageGallery';
 import { Searchbar } from './Searchbar/Searchbar';
 import { Loader } from './Loader/Loader';
@@ -19,7 +19,6 @@ export class App extends Component {
   };
 
   getSearchWord = searchWord => {
-    console.log(searchWord);
     this.setState({
       images: [],
       searchWord,
@@ -36,7 +35,6 @@ export class App extends Component {
       this.setState(prevState => ({
         images: [...prevState.images, ...images],
       }));
-      console.log(searchQuery);
     } catch (error) {
       this.setState({ error });
     } finally {
